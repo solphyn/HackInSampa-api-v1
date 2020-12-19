@@ -9,6 +9,9 @@
   "author": "Diego Bispo",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "^20.0.3"
+    "@hapi/hapi": "^20.0.3",
+    "hapi-auth-jwt2": "^10.2.0",
+    "mongoose": "^5.11.8",
+    "path": "^0.12.7"
   }
 }
