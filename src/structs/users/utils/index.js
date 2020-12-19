@@ -1,7 +1,7 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
-const secret = require('../../../config');
+//const secret = require('../../../config');
 const Boom = require('boom');
 const User = require('../model/User');
 const bcrypt = require('bcryptjs');
@@ -13,7 +13,7 @@ function createToken(user) {
     scopes = 'admin';
   }
 
-  return jwt.sign({ id: user._id, username: user.username, scope: scopes }, secret, { algorithm: 'HS256', expiresIn: "1h" } );
+  return jwt.sign({ id: user._id, username: user.username, scope: scopes }, 'HackInSampa', { algorithm: 'HS256', expiresIn: "1h" } );
 }
 
 function verifyUniqueUser(req, res) {
@@ -26,16 +26,21 @@ function verifyUniqueUser(req, res) {
   }, (err, user) => {
 
     if (user) {
-      if (user.username === req.payload.username) {
-        res(Boom.badRequest('Username taken'));
-        return;
-      }
       if (user.email === req.payload.email) {
-        res(Boom.badRequest('Email taken'));
+        res(Boom.badRequest('Deu Ruim'));
         return;
       }
     }
     res(req.payload);
+  });
+}
+
+function hashPassword(password, cb) {
+  
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      return cb(err, hash);
+    });
   });
 }
 
@@ -64,5 +69,6 @@ function verifyCredentials(req, res) {
 module.exports = {
   verifyUniqueUser: verifyUniqueUser,
   verifyCredentials: verifyCredentials,
-  createToken: createToken
+  createToken: createToken,
+  hashPassword:hashPassword
 }

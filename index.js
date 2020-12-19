@@ -17,11 +17,11 @@ const init = async () => {
   });
 
   server.auth.default("jwt"); */
-  
+
   await server.register({
     plugin: require("hapi-router"),
     options: {
-      routes: "src/structs/**/routes.js",
+      routes: "src/structs/**/routes/*.js",
     },
   });
 
